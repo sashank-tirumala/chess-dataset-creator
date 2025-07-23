@@ -1,0 +1,29 @@
+[project]
+name = "computer-use-chess"
+version = "0.1.0"
+description = "Add your description here"
+authors = [
+    { name = "sashanktirumala", email = "sashanktirumala1@gmail.com" }
+]
+dependencies = [
+    "chess>=1.11.2",
+    "matplotlib>=3.10.3",
+    "pillow>=11.3.0",
+    "cairosvg>=2.8.2",
+]
+readme = "README.md"
+requires-python = ">= 3.8"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.rye]
+managed = true
+dev-dependencies = []
+
+[tool.hatch.metadata]
+allow-direct-references = true
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/computer_use_chess"]
