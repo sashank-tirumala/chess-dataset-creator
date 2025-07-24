@@ -23,7 +23,7 @@ def play_and_save_images(dataset_dir: str, moves_per_game: int, game_idx: int):
         move = random_move(board)
         board.push(move)
         img_name = f"move_{m}.svg"
-        svg = chess.svg.board(board)
+        svg = chess.svg.board(board, colors={'square light': '#f0d9b5', 'square dark': '#b58863'})
         with open(os.path.join(game_dir, img_name), "w") as f:
             f.write(svg)
         move_record = {
