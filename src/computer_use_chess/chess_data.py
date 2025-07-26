@@ -62,7 +62,7 @@ def get_coord_from_square(square: str, board_size:int) -> int:
     coordinate = np.array((square_size*multiples[coord_dict[letter]]/2, square_size*multiples[num]/2)).astype(int)
     return coordinate
 
-def play_and_save_images(dataset_dir: str, moves_per_game: int, game_idx: int):
+def play_and_save_images(dataset_dir: str, moves_per_game: int, game_idx: int, normalize: bool = False):
     game_dir = os.path.join(dataset_dir, f"game_{game_idx}")
     os.makedirs(game_dir, exist_ok=True)
     board = chess.Board()
@@ -86,6 +86,7 @@ def play_and_save_images(dataset_dir: str, moves_per_game: int, game_idx: int):
             background_img_dict["min_y"],
             background_img_dict["max_y"]
         )
+        height, width, _ = overlaid_img.shape
         img_png_name = f"move_{m}.png"
         with open(os.path.join(game_dir, img_png_name), "wb") as f:
             Image.fromarray(overlaid_img).save(f, format='PNG')
@@ -94,6 +95,9 @@ def play_and_save_images(dataset_dir: str, moves_per_game: int, game_idx: int):
         to_square = square_to_coords(move.to_square)
         from_coords = get_coord_from_square(from_square, background_img_dict["dist"]) + np.array([background_img_dict["min_x"], background_img_dict["min_y"]])
         to_coords = get_coord_from_square(to_square, background_img_dict["dist"]) + np.array([background_img_dict["min_x"], background_img_dict["min_y"]])
+        if normalize:
+            from_coords = np.array([from_coords[0]*1000 / height, from_coords[1]*1000 / width]).astype(int)
+            to_coords = np.array([to_coords[0]*1000 / height, to_coords[1]*1000 / width]).astype(int)
         move_record = {
             "move_number": m,
             "uci": move.uci(),
@@ -108,4 +112,4 @@ def play_and_save_images(dataset_dir: str, moves_per_game: int, game_idx: int):
         json.dump(move_data, f, indent=2)
 
 # Usage
-play_and_save_images(dataset_dir="/Users/sashanktirumala/projects/data/test_dataset", moves_per_game=40, game_idx=0)
+play_and_save_images(dataset_dir="/Users/sashanktirumala/projects/data/test_dataset3", moves_per_game=40, game_idx=0, normalize=True)
